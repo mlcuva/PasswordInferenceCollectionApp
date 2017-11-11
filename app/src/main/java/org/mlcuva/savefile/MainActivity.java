@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor senAccelerometer;
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 600;
     private boolean updating = false;
     private OutputStreamWriter outWriter;
     private FileOutputStream fOutStream;
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     outWriter.close();
                     fOutStream.close();
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -58,10 +56,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         button_toggle.setOnClickListener(new View.OnClickListener()   {
             public void onClick(View v)  {
                 try {
-                    writeFile("new.txt");
+                    writeFile("data.csv");
                     update_sensor(v);
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -72,17 +69,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         try {
 
             File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            File file = new File(dir, "file.txt");
+            File file = new File(dir, filename);
             TextView label1 = (TextView) findViewById(R.id.label1);
             label1.setText(dir.getAbsolutePath() + filename);
 
             fOutStream = new FileOutputStream(file);
             outWriter = new OutputStreamWriter(fOutStream);
         }
-        catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-        catch (IOException e){
+        catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -127,10 +121,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         for (int i = 0; i < data_1000.size(); i++) {
                             outWriter.write(data_1000.get(i));
                         }
-                        Log.d("INFO","Saving... ");
+                        //Log.d("INFO","Saving... ");
                 }
             }catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Closed file...");
+                //e.printStackTrace();
             }
         }
     }
