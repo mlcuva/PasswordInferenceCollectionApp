@@ -8,9 +8,15 @@ import android.hardware.SensorManager;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.File;
@@ -61,6 +67,39 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        EditText editText = (EditText) findViewById(R.id.editText);
+        editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        editText.addTextChangedListener(new TextWatcher() {
+            int prevLength = -1;
+            int currentIndex;
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                currentIndex = start+count-1;
+                if (prevLength > currentIndex){
+                    System.out.println("BACK");
+                } else {
+                    System.out.println(s.charAt(start + count - 1));
+                }
+                prevLength = currentIndex;
+                System.out.println("Start: " + start);
+                System.out.println("Before: " + before);
+                System.out.println("Count: " + count);
+
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                /*
+                if (s.length() > prevLength) {
+                    System.out.println(s.charAt(s.length() - 1));
+                    prevLength = s.length();
+                }
+                */
             }
         });
     }
@@ -129,7 +168,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         }
     }
-
+    /*
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        System.out.println(keyCode);
+        return true;
+    }
+    */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 

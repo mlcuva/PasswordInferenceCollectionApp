@@ -11,6 +11,7 @@
         android:layout_width="166dp"
         android:layout_height="17dp"
         android:text=""
+        android:inputType="textNoSuggestions"
         android:visibility="visible"
         tools:text="@string/Save"
         tools:layout_constraintTop_creator="1"
@@ -77,15 +78,14 @@
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="23dp"
         app:layout_constraintTop_toBottomOf="@+id/xyz"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
 </android.support.constraint.ConstraintLayout>
