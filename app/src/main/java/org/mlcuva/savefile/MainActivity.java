@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private FileOutputStream fOutStream;
     private int count = 0;
     private ArrayList<String> data_1000 = new ArrayList<String>();
+    private String currentKey = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         button.setOnClickListener(new View.OnClickListener()   {
             public void onClick(View v)  {
                 try {
+                    update_sensor(v);
                     outWriter.close();
                     fOutStream.close();
                 } catch (Exception e) {
@@ -79,15 +81,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 currentIndex = start+count-1;
                 if (prevLength > currentIndex){
+                    currentKey = "BACK";
                     System.out.println("BACK");
                 } else {
+                    currentKey = Character.toString(s.charAt(start + count - 1));
                     System.out.println(s.charAt(start + count - 1));
                 }
                 prevLength = currentIndex;
-                System.out.println("Start: " + start);
-                System.out.println("Before: " + before);
-                System.out.println("Count: " + count);
-
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 long curTime = System.currentTimeMillis();
 
-                if ((curTime - lastUpdate) > 20) {
+                if ((curTime - lastUpdate) > 30) {
                     long diffTime = (curTime - lastUpdate);
                     lastUpdate = curTime;
                     last_x = x;
@@ -153,14 +153,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
             TextView xyz = (TextView) findViewById(R.id.xyz);
             xyz.setText(last_x + " " + last_y + " " + last_z);
-            data_1000.add(System.currentTimeMillis() + "," + last_x + "," + last_y + "," + last_z + "\n");
+            data_1000.add(System.currentTimeMillis() + "," + last_x + "," + last_y + "," + last_z + "," + currentKey + "\n");
             count += 1;
             try {
                 if (count > 10){
                         for (int i = 0; i < data_1000.size(); i++) {
                             outWriter.write(data_1000.get(i));
                         }
-                        //Log.d("INFO","Saving... ");
+                        data_1000.removeAll(data_1000);
+                    count = 0;
                 }
             }catch (IOException e) {
                 System.out.println("Closed file...");
